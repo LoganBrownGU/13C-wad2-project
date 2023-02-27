@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        <title>
+            {% block title_block %}
+            Pop Pop Cinema
+            {% endblock %}
+        </title>
+    </head>
+
+    <body>
+        <div>
+            {% block body_block %}
+            {% endblock %} <br />
+        </div>
+        <div>
+            <a href="{% url 'cinema:home' %}">Home</a><br />
+        </div>
+    </body>
+</html>

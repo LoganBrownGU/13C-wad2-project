@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        <title>Home</title>
+    </head>
+
+    <body>
+        <div>
+            This is the home page <br />
+        </div>
+        <div>
+            <a href="{% url 'cinema:user' %}">User</a><br />
+            <a href="{% url 'cinema:manager' %}">Manager</a><br />
+            <a href="{% url 'cinema:bookings' %}">Bookings</a><br />
+            <a href="{% url 'cinema:screenings' %}">Screenings</a><br />
+            <a href="{% url 'cinema:reviews' %}">Reviews</a><br />
+            <a href="{% url 'cinema:search' %}">Search</a><br />
+            <a href="{% url 'cinema:snacks' %}">Snacks</a><br />
+        </div>
+    </body>
+</html>
