@@ -4,19 +4,31 @@
 
     <head>
         <title>
+            Pop pop cinema - 
             {% block title_block %}
-            Pop Pop Cinema
             {% endblock %}
         </title>
     </head>
 
     <body>
+        <div id="header">
+            <a href="{% url 'cinema:home' %}">Home</a>
+            <a href="{% url 'cinema:screenings' %}">Screenings</a>
+            <a href="{% url 'cinema:user' %}">My bookings</a>
+            <a href="">Log out</a>
+        </div>
+        <hr>
+
         <div>
             {% block body_block %}
-            {% endblock %} <br />
+            {% endblock %}
         </div>
-        <div>
-            <a href="{% url 'cinema:home' %}">Home</a><br />
+        <hr>
+
+        <div id="footer">
+            Contact us: <br>
+            poppop@cinema.com <br>
+            07777777777 <br>
         </div>
     </body>
 </html>
