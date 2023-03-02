@@ -5,3 +5,9 @@ __pycache__/
 db.sqlite3
 *.key
 thumbs.db
+
+# Virtual Environments
+.env
+.venv
+env/
+venv/
