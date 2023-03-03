@@ -6,5 +6,3 @@ admin.site.register(Screen)
 admin.site.register(Screening)
 admin.site.register(Film)
 admin.site.register(Review)
-
-# test thingy
