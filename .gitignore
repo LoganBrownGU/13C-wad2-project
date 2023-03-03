@@ -11,3 +11,5 @@ thumbs.db
 .venv
 env/
 venv/
+
+.idea
