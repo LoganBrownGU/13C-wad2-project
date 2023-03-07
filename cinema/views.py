@@ -41,3 +41,8 @@ def snacks(request):
     context_dict = {}
 
     return render(request, 'cinema/snacks.html', context=context_dict)
+
+def register(request):
+    context_dict = {}
+
+    return render(request, 'cinema/register.html', context=context_dict)

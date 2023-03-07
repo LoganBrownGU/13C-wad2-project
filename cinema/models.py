@@ -51,3 +51,11 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.user} reviewed {self.IMDB_num}"
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    picture = models.ImageField(upload_to='profile_images', blank=True)
+
+    def __str__(self):
+        return self.user.username
