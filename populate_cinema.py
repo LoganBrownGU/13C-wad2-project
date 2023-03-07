@@ -10,15 +10,8 @@ from cinema.models import Booking, Screen, Screening, Film, Review
 
 
 def populate():
-    try:
-        user1 = User.objects.get(username='user1')
-        user1.delete()
-        user2 = User.objects.get(username='user2')
-        user2.delete()
-    except:
-        pass
-    user1 = User.objects.create_user('user1', password='password')
-    user2 = User.objects.create_user('user2', password='password123')
+    user1 = User.objects.create_user('testUser1', password='password')
+    user2 = User.objects.create_user('testUser2', password='password123')
 
     screen1 = Screen.objects.get_or_create(screen_num=1)
     screen2 = Screen.objects.get_or_create(screen_num=2)
@@ -45,9 +38,11 @@ def populate():
     booking3 = Booking.objects.get_or_create(screen=screen3[0], seats='C1,C2', date=timezone.now().date(),
                                              time=timezone.now().time())
 
-    review1 = Review.objects.get_or_create(user=user1, IMDB_num=film1[0], stars=2, comments='Bad', likes=5)
-    review2 = Review.objects.get_or_create(user=user1, IMDB_num=film2[0], stars=1, comments='Very Bad', likes=23)
-    review3 = Review.objects.get_or_create(user=user2, IMDB_num=film3[0], stars=5, comments='Good', likes=135)
+    review1 = Review.objects.get_or_create(user=user1, IMDB_num=film1[0], stars=2, review_text='Bad', likes=5)
+    review2 = Review.objects.get_or_create(user=user1, IMDB_num=film2[0], stars=1, review_text='Very Bad', likes=23)
+    review3 = Review.objects.get_or_create(user=user2, IMDB_num=film3[0], stars=5, review_text='Good', likes=135)
+
+    print('Population Script Completed')
 
 
 if __name__ == '__main__':
