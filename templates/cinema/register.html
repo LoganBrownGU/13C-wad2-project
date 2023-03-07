@@ -8,10 +8,10 @@
 <h1>Register for PopPopCinema</h1>
 {% if registered %}
 <strong>Thank You for Registering!</strong>
-<a href="{% url 'Cinema:index' %}">Return to the homepage.</a><br />
+<a href="{% url 'cinema:home' %}">Return to the homepage.</a><br />
 {% else %}
-Rango says: <strong>register here!</strong><br />
-<form id="user_form" method="post" action="{% url 'Cinema:register' %}" enctype="multipart/form-data">
+<strong>register here!</strong><br />
+<form id="user_form" method="post" action="{% url 'cinema:register' %}" enctype="multipart/form-data">
 
 	{% csrf_token %}
 	{{ user_form.as_p }}
