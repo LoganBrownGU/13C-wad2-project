@@ -3,10 +3,14 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse
 from cinema.forms import UserForm
+from cinema.models import Film
 
 
 def home(request):
+    film_list = Film.objects.order_by('-release')[:5]
+    
     context_dict = {}
+    context_dict['films'] = film_list
 
     return render(request, 'cinema/home.html', context=context_dict)
 
