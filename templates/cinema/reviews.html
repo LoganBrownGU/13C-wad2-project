@@ -5,5 +5,22 @@
 {% endblock %}
 
 {% block body_block %}
-    This is the reviews page
+    <div>
+        {% if film %}
+            <h1>{{ film.title }}</h1>
+            {% if reviews %}
+                <ul>
+                    {% for review in reviews %}
+                    <strong>{{ review.user }} - {{ review.stars }}/5</strong> </br>
+                    {{ review.review_text }} </br> 
+                    Likes: {{ review.likes }}   Dislikes: {{ review.dislikes }}</br>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <strong>No reviews for this film.</strong>
+            {% endif %}
+        {% else %}
+            The specified film does not exist.
+        {% endif %}
+    </div>
 {% endblock %}

@@ -16,7 +16,6 @@ Home
     <a href="{% url 'cinema:manager' %}">Manager</a><br />
     <a href="{% url 'cinema:bookings' %}">Bookings</a><br />
     <a href="{% url 'cinema:screenings' %}">Screenings</a><br />
-    <a href="{% url 'cinema:reviews' %}">Reviews</a><br />
     <a href="{% url 'cinema:search' %}">Search</a><br />
     <a href="{% url 'cinema:snacks' %}">Snacks</a><br />
 </div>
@@ -26,7 +25,7 @@ Home
     {% if films %}
         <ul>
             {% for film in films %}
-                {{ film.title }} - {{ film.director }}<br />               
+                <a href="/cinema/reviews/{{ film.slug }}/">{{ film.title }}</a> - {{ film.director }} - {{ film.release }}<br />
             {% endfor %}
         </ul>
     {% else %}
