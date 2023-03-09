@@ -6,43 +6,50 @@ import django
 django.setup()
 from django.contrib.auth.models import User
 from django.utils import timezone
+from random import randrange
+from datetime import datetime
 from cinema.models import Booking, Screen, Screening, Film, Review
 
 
 def populate():
-    user1 = User.objects.create_user('testUser1', password='password')
-    user2 = User.objects.create_user('testUser2', password='password123')
+    try:
+        user1 = User.objects.get(username='user1')
+        user1.delete()
+        user2 = User.objects.get(username='user2')
+        user2.delete()
+    except:
+        pass
 
-    screen1 = Screen.objects.get_or_create(screen_num=1)
-    screen2 = Screen.objects.get_or_create(screen_num=2)
-    screen3 = Screen.objects.get_or_create(screen_num=3)
+    # create 20 users
+    users = []
+    for i in range(20):
+        users.append(User.objects.create_user("user"+str(i), password="user"+str(i)))
 
-    screening1 = Screening.objects.get_or_create(screen_num=screen1[0], date=timezone.now().date(),
-                                                 time=timezone.now().time())
-    screening2 = Screening.objects.get_or_create(screen_num=screen2[0], date=timezone.now().date(),
-                                                 time=timezone.now().time())
-    screening3 = Screening.objects.get_or_create(screen_num=screen3[0], date=timezone.now().date(),
-                                                 time=timezone.now().time())
+    films = []
+    with open("films.tsv") as f:
+        while line := f.readline():
+            line = line.split("\t")
+            if len(line) < 9:
+                continue
+            films.append(Film.objects.get_or_create(IMDB_num=line[0], title=line[2], release=datetime.strptime(line[5] + "-01-01", "%Y-%m-%d").date(), cast="Nicolas Cage, Pedro Pascal", director="Quentin Tarantino", age_rating="18"))
 
-    film1 = Film.objects.get_or_create(IMDB_num='tt0000001', title='Film 1', release=timezone.now().date(),
-                                       cast='Actor 1, Actor 2', director='Director 1')
-    film2 = Film.objects.get_or_create(IMDB_num='tt0000002', title='Film 2', release=timezone.now().date(),
-                                       cast='Actor 3, Actor 4', director='Director 2')
-    film3 = Film.objects.get_or_create(IMDB_num='tt0000003', title='Film 3', release=timezone.now().date(),
-                                       cast='Actor 5, Actor 6', director='Director 3')
 
-    booking1 = Booking.objects.get_or_create(screen=screen1[0], seats='A1,A2', date=timezone.now().date(),
-                                             time=timezone.now().time())
-    booking2 = Booking.objects.get_or_create(screen=screen2[0], seats='B1,B2', date=timezone.now().date(),
-                                             time=timezone.now().time())
-    booking3 = Booking.objects.get_or_create(screen=screen3[0], seats='C1,C2', date=timezone.now().date(),
-                                             time=timezone.now().time())
+    # film1 = Film.objects.get_or_create(IMDB_num='tt0000001', title='Film 1', release=timezone.now().date(),
+    #                                    cast='Actor 1, Actor 2', director='Director 1')
+    # film2 = Film.objects.get_or_create(IMDB_num='tt0000002', title='Film 2', release=timezone.now().date(),
+    #                                    cast='Actor 3, Actor 4', director='Director 2')
+    # film3 = Film.objects.get_or_create(IMDB_num='tt0000003', title='Film 3', release=timezone.now().date(),
+    #                                    cast='Actor 5, Actor 6', director='Director 3')
 
-    review1 = Review.objects.get_or_create(user=user1, IMDB_num=film1[0], stars=2, review_text='Bad', likes=5)
-    review2 = Review.objects.get_or_create(user=user1, IMDB_num=film2[0], stars=1, review_text='Very Bad', likes=23)
-    review3 = Review.objects.get_or_create(user=user2, IMDB_num=film3[0], stars=5, review_text='Good', likes=135)
-
-    print('Population Script Completed')
+    reviews = []
+    possible_comments = ["bad", "decent but i didnt like the end", "good"]
+    for film in films:
+        for i in range(10):
+            user = users[randrange(0, len(users)-1)]
+            review_text = possible_comments[randrange(0, len(possible_comments)-1)]
+            likes = randrange(0, 1000)
+            dislikes = randrange(0, 1000)
+            reviews.append(Review.objects.get_or_create(user=user, IMDB_num=film[0], stars=randrange(1, 5), review_text=review_text, likes=likes, dislikes=dislikes))
 
 
 if __name__ == '__main__':
