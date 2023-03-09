@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse
 from cinema.forms import UserForm
-from cinema.models import Film
+from cinema.models import Film, Review
 
 
 def home(request):
@@ -39,8 +39,16 @@ def screenings(request):
     return render(request, 'cinema/screenings.html', context=context_dict)
 
 
-def reviews(request):
+def reviews(request, film_title_slug):
     context_dict = {}
+    try:
+        film = Film.objects.get(slug=film_title_slug)
+        reviews = Review.objects.filter(IMDB_num=film.IMDB_num).order_by('-likes')
+        context_dict['reviews'] = reviews
+        context_dict['film'] = film
+    except Film.DoesNotExist:
+        context_dict['film'] = None
+        context_dict['reviews'] = None
 
     return render(request, 'cinema/reviews.html', context=context_dict)
 

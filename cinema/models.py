@@ -2,6 +2,7 @@ from django.db import models
 
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.template.defaultfilters import slugify
 
 
 class Booking(models.Model):
@@ -39,6 +40,11 @@ class Film(models.Model):
     director = models.CharField(max_length=255)
     age_rating = models.CharField(max_length=255)
     photo = models.ImageField(upload_to='static/images/film_images', blank=True)
+    slug = models.SlugField(unique=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.IMDB_num)
+        super(Film, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
