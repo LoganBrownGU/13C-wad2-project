@@ -20,4 +20,17 @@ Home
     <a href="{% url 'cinema:search' %}">Search</a><br />
     <a href="{% url 'cinema:snacks' %}">Snacks</a><br />
 </div>
+<br />
+<div>
+    <h3> New Releases: </h3>
+    {% if films %}
+        <ul>
+            {% for film in films %}
+                {{ film.title }} - {{ film.director }}<br />               
+            {% endfor %}
+        </ul>
+    {% else %}
+        <strong>There are no films present.</strong>
+    {% endif %}
+</div>
 {% endblock %}
