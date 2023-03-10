@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse
-from cinema.forms import UserForm
+from cinema.forms import UserForm, ReviewForm
 from cinema.models import Film, Review
 
 
@@ -93,3 +93,31 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect(reverse('cinema:home'))
+
+def leave_review(request, film_title_slug):
+    try:
+        film = Film.objects.get(slug=film_title_slug)
+    except Film.DoesNotExist:
+        film = None
+
+    if film is None:
+        return redirect('/cinema/')
+    
+    form = ReviewForm()
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+
+    if form.is_valid():
+        if film:
+            review = form.save(commit=False)
+            review.IMDB_num = film
+            review.user = "Jake"
+            review.save()
+
+            return redirect(reverse('cinema:leave_review', kwargs={'film_title_slug':film_title_slug}))
+        else:
+            print(form.errors)
+    
+    context_dict = {'form': form, 'film': film}
+    return render(request, 'cinema/leave_review.html', context=context_dict)
