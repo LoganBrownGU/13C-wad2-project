@@ -27,18 +27,6 @@ def manager(request):
     return render(request, 'cinema/manager.html', context=context_dict)
 
 
-def bookings(request):
-    context_dict = {}
-
-    return render(request, 'cinema/bookings.html', context=context_dict)
-
-
-def screenings(request):
-    context_dict = {}
-
-    return render(request, 'cinema/screenings.html', context=context_dict)
-
-
 def reviews(request, film_title_slug):
     context_dict = {}
     try:
@@ -57,12 +45,6 @@ def search(request):
     context_dict = {}
 
     return render(request, 'cinema/search.html', context=context_dict)
-
-
-def snacks(request):
-    context_dict = {}
-
-    return render(request, 'cinema/snacks.html', context=context_dict)
 
 
 def register(request):
