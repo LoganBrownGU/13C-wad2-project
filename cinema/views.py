@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse
@@ -8,7 +8,7 @@ from cinema.models import Film, Review
 
 def home(request):
     film_list = Film.objects.order_by('-release')[:5]
-    
+
     context_dict = {}
     context_dict['films'] = film_list
 
@@ -87,6 +87,7 @@ def register(request):
                   context={'user_form': user_form,
                            'registered': registered})
 
+
 def user_login(request):
     if request.method == 'POST':
 
@@ -105,3 +106,8 @@ def user_login(request):
             return HttpResponse("Invalid login details supplied.")
     else:
         return render(request, 'cinema/login.html')
+
+
+def user_logout(request):
+    logout(request)
+    return redirect(reverse('cinema:home'))
