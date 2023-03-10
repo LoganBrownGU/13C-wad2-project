@@ -8,6 +8,9 @@
     <div>
         {% if film %}
             <h1>{{ film.title }}</h1>
+            {% if user.is_authenticated %}
+            <a href="{% url 'cinema:leave_review' film.slug %}">Leave a Review</a><br />
+            {% endif %}
             {% if reviews %}
                 <ul>
                     {% for review in reviews %}
