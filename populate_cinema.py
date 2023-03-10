@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from random import randrange
 from datetime import datetime
-from cinema.models import Booking, Screen, Screening, Film, Review
+from cinema.models import Film, Review
 
 def populate():
 
@@ -19,13 +19,11 @@ def populate():
     films = []
     with open("films.tsv") as f:
         contents = f.readlines()
-
         for line in contents:
             line = line.split("\t")
             if len(line) < 9:
                 continue
             films.append(Film.objects.get_or_create(IMDB_num=line[0], title=line[2], release=datetime.strptime(line[5] + "-01-01", "%Y-%m-%d").date(), cast="Nicolas Cage, Pedro Pascal", director="Quentin Tarantino", age_rating="18"))
-        
 
     reviews = []
     possible_comments = ["bad", "decent but i didnt like the end", "good"]
