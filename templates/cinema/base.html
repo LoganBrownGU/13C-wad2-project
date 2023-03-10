@@ -4,7 +4,7 @@
 <html>
 <head>
     <title>
-        Pop pop cinema -
+        PopPop Cinema -
         {% block title_block %}
         {% endblock %}
     </title>
@@ -37,7 +37,7 @@
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Sign out</a>
+                        <a class="nav-link" href="{% url 'cinema:logout' %}">Logout</a>
                     </li>
                     {% else %}
                     <li class="nav-item">
