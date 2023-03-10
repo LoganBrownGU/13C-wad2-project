@@ -1,4 +1,4 @@
-# Pop Pop Cinema
+# PopPopCinema
 
 ## Setup Instructions
 Navigate to the project directory and follow steps:
