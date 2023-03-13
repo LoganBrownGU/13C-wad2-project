@@ -55,6 +55,17 @@ def reviews(request, film_title_slug):
 
 def search(request):
     context_dict = {}
+    if request.method != "POST":
+        context_dict["films"] = None
+        return render(request, 'cinema/search.html', context=context_dict)
+        
+    search_text = request.POST.get("search")
+    context_dict["search"] = search_text
+
+    films = Film.objects.filter(title__startswith=search_text)
+    context_dict["films"] = films
+
+    print(context_dict["films"])
 
     return render(request, 'cinema/search.html', context=context_dict)
 
