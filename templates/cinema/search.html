@@ -6,10 +6,17 @@
 
 {% block body_block %}
 
-    <h2>Your search: "{{ search }}"</h2>
+    Filters 
+    <select name="filters" id="filters">
+        <option value="none">None</option>
+        <option value="recent">Recent</option>
+        <option value="popular">Popular</option>
+    </select>
+
+    <h2 id="search_text">Your search: "{{ search }}"</h2>
 
     {% if films %}
-        <ul>
+        <ul id="films">
             {% for film in films %}
                 <a href="/cinema/reviews/{{ film.slug }}/">{{ film.title }}</a> - {{ film.director }} - {{ film.release }}<br />
             {% endfor %}
