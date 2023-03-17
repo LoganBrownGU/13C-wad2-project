@@ -131,7 +131,7 @@ def leave_review(request, film_title_slug):
                 review.dislikes = 0
                 review.save()
 
-                return redirect(reverse('cinema:reviews', kwargs={'film_title_slug':film_title_slug}))
+                return redirect(reverse('cinema:leave_reviews', kwargs={'film_title_slug':film_title_slug}))
         else:
             print(form.errors)
     
