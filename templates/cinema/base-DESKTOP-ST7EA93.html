@@ -4,7 +4,7 @@
 <html>
 <head>
     <title>
-        PopPopCinema -
+        PopPop Cinema -
         {% block title_block %}
         {% endblock %}
     </title>
@@ -12,9 +12,6 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
     <!-- JavaScript -->
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-    <!-- JQuery -->
-    <script src="{% static 'js/jquery-3.3.1.min.js' %}" crossorigin="anonymous"></script>
-    <script src="{% static 'js/search.js' %}"></script>
 </head>
 
 <body>
@@ -32,6 +29,12 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{% url 'cinema:home' %}">Home</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'cinema:screenings' %}">Screenings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'cinema:bookings' %}">Bookings</a>
+                    </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'cinema:logout' %}">Logout</a>
@@ -48,7 +51,7 @@
                 {% if user.is_authenticated %}
                 Hello, {{ user.get_username }}! &nbsp
                 {% endif %}
-                <form id="search_bar" action="{% url 'cinema:search' %}" class="d-flex" role="search" method="get">
+                <form id="search_bar" action="{% url 'cinema:search' %}" class="d-flex" role="search" method="post">
                     {% csrf_token %}
                     <input name="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
@@ -71,7 +74,7 @@
             <p class="card-text">Email: contactpop@popcinema.com </p>
         </div>
         <div class="card-footer text-muted">
-            PopPopCinema
+            Pop pop cinema
         </div>
     </div>
 </div>
