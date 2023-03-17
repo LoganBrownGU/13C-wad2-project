@@ -10,6 +10,24 @@ from random import randrange
 from datetime import datetime
 from cinema.models import Film, Review
 
+import re
+
+zero = ord('0')
+nine = ord('9')
+a = ord('a')
+z = ord('z')
+A = ord('A')
+Z = ord('z')
+
+def sanitise(string):
+    out = ""
+
+    for c in string:
+        if str(c).isalnum() or c == " ":
+            out += str(c)
+            
+    return out
+
 def populate():
 
     users = []
@@ -23,6 +41,9 @@ def populate():
             line = line.split("\t")
             if len(line) < 9:
                 continue
+
+            line[2] = sanitise(line[2])
+        
             films.append(Film.objects.get_or_create(IMDB_num=line[0], title=line[2], release=datetime.strptime(line[5] + "-01-01", "%Y-%m-%d").date(), cast="Nicolas Cage, Pedro Pascal", director="Quentin Tarantino", age_rating="18"))
 
     reviews = []
