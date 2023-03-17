@@ -127,3 +127,7 @@ def leave_review(request, film_title_slug):
     
     context_dict = {'form': form, 'film': film, 'user': user}
     return render(request, 'cinema/leave_review.html', context=context_dict)
+
+
+def user_profile(request):
+    return redirect(reverse('cinema/usere.html'))
