@@ -104,7 +104,6 @@ def user_logout(request):
     logout(request)
     return redirect(reverse('cinema:home'))
 
-<<<<<<< HEAD
 def leave_review(request, film_title_slug):
     try:
         film = Film.objects.get(slug=film_title_slug)
@@ -114,25 +113,35 @@ def leave_review(request, film_title_slug):
     if film is None:
         return redirect('/cinema/')
     
+    user = request.user
+
     form = ReviewForm()
 
+    print(request.method)
     if request.method == 'POST':
+        print(film.IMDB_num)
         form = ReviewForm(request.POST)
 
-    if form.is_valid():
-        if film:
-            review = form.save(commit=False)
-            review.IMDB_num = film
-            review.user = "Jake"
-            review.save()
+        if form.is_valid():
+            if film:
+                review = form.save(commit=False)
+                review.IMDB_num = film
+                review.user = user
+                review.likes = 0
+                review.dislikes = 0
+                review.save()
 
-            return redirect(reverse('cinema:leave_review', kwargs={'film_title_slug':film_title_slug}))
+                return redirect(reverse('cinema:reviews', kwargs={'film_title_slug':film_title_slug}))
         else:
             print(form.errors)
     
-    context_dict = {'form': form, 'film': film}
+    context_dict = {'form': form, 'film': film, 'user': user}
     return render(request, 'cinema/leave_review.html', context=context_dict)
-=======
+
+
+def user_profile(request):
+    return redirect(reverse('cinema/usere.html'))
+
 
 def change_search_filter(request):
     if request.method == "GET":
@@ -168,4 +177,4 @@ def change_search_filter(request):
         return HttpResponse(outstr)
 
     return HttpResponse(None)
->>>>>>> search-bar
+

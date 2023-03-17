@@ -32,6 +32,12 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{% url 'cinema:home' %}">Home</a>
                     </li>
+
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                         <a class="nav-link" href="{% url 'cinema:user' %}">User</a>
+                    </li>
+                    {% endif %}
                     {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'cinema:logout' %}">Logout</a>
