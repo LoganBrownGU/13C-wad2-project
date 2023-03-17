@@ -128,8 +128,6 @@ def change_search_filter(request):
         filter = request.GET.get("filter")
         search_text = request.GET.get("search")
 
-        print("search: " + filter)
-
         films = Film.objects.filter(title__startswith=search_text)
 
         if (filter == "recent"):
