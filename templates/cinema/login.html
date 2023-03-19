@@ -1,20 +1,27 @@
-
-{% extends 'cinema/base.html' %}
-{% load staticfiles %}
-
+{% extends 'cinema/base.html' %} 
 
 {% block title_block %}
 Login
-{% endblock %}
+{% endblock %} 
 
 {% block body_block %}
-<h1>Login to PopPopCinema</h1>
-<form id="login_form" method="post" action="{% url 'cinema:login' %}">
-  {% csrf_token %}
-  Username: <input type="text" name="username" value="" size="50" />
-  <br />
-  Password: <input type="password" name="password" value="" size="50" />
-  <br />
-  <input type="submit" value="submit" />
-</form>
+
+<div class="card col-lg-4">
+    <div class="card-body">
+        <h1>Login</h1>
+        <form id="login_form" method="post" action="{% url 'cinema:login' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" aria-describedby="usernameHelp" name="username" />
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" />
+        </div>
+        <button type="submit" class="btn btn-primary" value="submit">Login</button>
+        </form>
+    </div>
+</div>
+
 {% endblock %}
