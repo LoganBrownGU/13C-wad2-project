@@ -2,8 +2,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse
-from cinema.forms import UserForm
+from cinema.forms import UserForm, ReviewForm
 from cinema.models import Film, Review
+import json
 
 
 def home(request):
@@ -27,18 +28,6 @@ def manager(request):
     return render(request, 'cinema/manager.html', context=context_dict)
 
 
-def bookings(request):
-    context_dict = {}
-
-    return render(request, 'cinema/bookings.html', context=context_dict)
-
-
-def screenings(request):
-    context_dict = {}
-
-    return render(request, 'cinema/screenings.html', context=context_dict)
-
-
 def reviews(request, film_title_slug):
     context_dict = {}
     try:
@@ -55,14 +44,17 @@ def reviews(request, film_title_slug):
 
 def search(request):
     context_dict = {}
+    if request.method != "GET":
+        context_dict["films"] = None
+        return render(request, 'cinema/search.html', context=context_dict)
+        
+    search_text = request.GET.get("search")
+    context_dict["search"] = search_text
+
+    films = Film.objects.filter(title__startswith=search_text)
+    context_dict["films"] = films
 
     return render(request, 'cinema/search.html', context=context_dict)
-
-
-def snacks(request):
-    context_dict = {}
-
-    return render(request, 'cinema/snacks.html', context=context_dict)
 
 
 def register(request):
@@ -111,3 +103,78 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect(reverse('cinema:home'))
+
+def leave_review(request, film_title_slug):
+    try:
+        film = Film.objects.get(slug=film_title_slug)
+    except Film.DoesNotExist:
+        film = None
+
+    if film is None:
+        return redirect('/cinema/')
+    
+    user = request.user
+
+    form = ReviewForm()
+
+    print(request.method)
+    if request.method == 'POST':
+        print(film.IMDB_num)
+        form = ReviewForm(request.POST)
+
+        if form.is_valid():
+            if film:
+                review = form.save(commit=False)
+                review.IMDB_num = film
+                review.user = user
+                review.likes = 0
+                review.dislikes = 0
+                review.save()
+
+                return redirect(reverse('cinema:leave_reviews', kwargs={'film_title_slug':film_title_slug}))
+        else:
+            print(form.errors)
+    
+    context_dict = {'form': form, 'film': film, 'user': user}
+    return render(request, 'cinema/leave_review.html', context=context_dict)
+
+
+def user_profile(request):
+    return redirect(reverse('cinema/usere.html'))
+
+
+def change_search_filter(request):
+    if request.method == "GET":
+        filter = request.GET.get("filter")
+        search_text = request.GET.get("search")
+
+        print("search: " + filter)
+
+        films = Film.objects.filter(title__startswith=search_text)
+
+        if (filter == "recent"):
+            films = films.order_by("-release")[:10]
+            films = list(films)
+        elif (filter == "popular"):
+
+            def find_mean(f):
+                reviews = Review.objects.filter(IMDB_num=f.IMDB_num)
+                mean = 0
+                
+                for review in reviews:
+                    mean += review.stars
+                
+                mean /= len(reviews)
+                return mean
+            
+            films = sorted(films, key=lambda f: find_mean(f), reverse=True)[:10]
+
+        outstr = "<xml>"
+        for film in films:
+            outstr += "<film><title>" + film.title + "</title><director>" + film.director + "</director><release>" + str(film.release) + "</release>" + "<slug>" + film.slug + "</slug></film>\n"
+        outstr += "</xml>"
+
+        return HttpResponse(outstr)
+
+    return HttpResponse(None)
+

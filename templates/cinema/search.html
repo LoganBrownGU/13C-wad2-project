@@ -5,5 +5,17 @@
 {% endblock %}
 
 {% block body_block %}
-    This is the search page
+
+    <h2>Your search: "{{ search }}"</h2>
+
+    {% if films %}
+        <ul>
+            {% for film in films %}
+                <a href="/cinema/reviews/{{ film.slug }}/">{{ film.title }}</a> - {{ film.director }} - {{ film.release }}<br />
+            {% endfor %}
+        </ul>
+    {% else %}
+        <strong>Your search returned no results</strong>
+    {% endif %}
+
 {% endblock %}
