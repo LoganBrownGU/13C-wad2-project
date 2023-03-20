@@ -34,12 +34,6 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="{% url 'cinema:home' %}">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'cinema:screenings' %}">Screenings</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'cinema:bookings' %}">Bookings</a>
-                </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'cinema:logout' %}">Logout</a>

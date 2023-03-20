@@ -4,7 +4,6 @@ from django.http import HttpResponse
 from django.urls import reverse
 from cinema.forms import UserForm, ReviewForm
 from cinema.models import Film, Review
-import json
 
 
 
