@@ -9,7 +9,8 @@ class UserForm(forms.ModelForm):
         fields = ('username', 'email', 'password',)
         widgets = {'username': forms.TextInput(attrs={'class': 'form-control'}),
                    'email': forms.TextInput(attrs={'class': 'form-control'}),
-                   'password': forms.PasswordInput(attrs={'class': 'form-control'}),}
+                   'password': forms.PasswordInput(attrs={'class': 'form-control'}), }
+
 
 class ReviewForm(forms.ModelForm):
     stars = forms.IntegerField(max_value=5, min_value=0, required=True, help_text="How many stars out of 5?")
@@ -21,4 +22,4 @@ class ReviewForm(forms.ModelForm):
         model = Review
 
         exclude = ('user', 'IMDB_num',)
-        fields = ('username', 'email', 'password',)
+        # fields = ('username', 'email', 'password',)
