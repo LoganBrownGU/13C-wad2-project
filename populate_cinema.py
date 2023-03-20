@@ -25,6 +25,7 @@ def sanitise(string):
     for c in string:
         if str(c).isalnum() or c == " ":
             out += str(c)
+
             print("here")
 
     print(out)

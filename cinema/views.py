@@ -7,6 +7,7 @@ from cinema.models import Film, Review
 import json
 
 
+
 def home(request):
     film_list = Film.objects.order_by('-release')[:5]
 
@@ -104,6 +105,40 @@ def user_logout(request):
     logout(request)
     return redirect(reverse('cinema:home'))
 
+
+def change_search_filter(request):
+    if request.method == "GET":
+        filter = request.GET.get("filter")
+        search_text = request.GET.get("search")
+
+        films = Film.objects.filter(title__startswith=search_text)
+
+        if (filter == "recent"):
+            films = films.order_by("-release")[:10]
+            films = list(films)
+        elif (filter == "popular"):
+
+            def find_mean(f):
+                reviews = Review.objects.filter(IMDB_num=f.IMDB_num)
+                mean = 0
+                
+                for review in reviews:
+                    mean += review.stars
+                
+                mean /= len(reviews)
+                return mean
+            
+            films = sorted(films, key=lambda f: find_mean(f), reverse=True)[:10]
+
+        outstr = "<xml>"
+        for film in films:
+            outstr += "<film><title>" + film.title + "</title><director>" + film.director + "</director><release>" + str(film.release) + "</release>" + "<slug>" + film.slug + "</slug></film>\n"
+        outstr += "</xml>"
+
+        return HttpResponse(outstr)
+
+    return HttpResponse(None)
+
 def leave_review(request, film_title_slug):
     try:
         film = Film.objects.get(slug=film_title_slug)
@@ -131,7 +166,8 @@ def leave_review(request, film_title_slug):
                 review.dislikes = 0
                 review.save()
 
-                return redirect(reverse('cinema:leave_reviews', kwargs={'film_title_slug':film_title_slug}))
+                return redirect(reverse('cinema:leave_review', kwargs={'film_title_slug':film_title_slug}))
+
         else:
             print(form.errors)
     
