@@ -20,6 +20,4 @@ class ReviewForm(forms.ModelForm):
 
     class Meta:
         model = Review
-
         exclude = ('user', 'IMDB_num',)
-        # fields = ('username', 'email', 'password',)
