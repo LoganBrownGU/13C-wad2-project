@@ -5,6 +5,26 @@
 {% endblock %}
 
 {% block body_block %}
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <style>
+            .likeButton {
+                border: none;
+                color: black;
+                background-color: white;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 14px;
+                cursor: pointer;
+            }
+            .likeButton:hover {
+                background-color: lightgrey;
+            }
+        </style>        
+    </head>
     <div>
         {% if film %}
             <h1>{{ film.title }}</h1>
@@ -14,9 +34,19 @@
             {% if reviews %}
                 <ul>
                     {% for review in reviews %}
-                        <a href = {% url "cinema:profile" review.user.username %}><strong>{{ review.user }} - {{ review.stars }}/5</strong></a><br />
-                    {{ review.review_text }} <br />
-                    Likes: {{ review.likes }}   Dislikes: {{ review.dislikes }}<br />
+                    <a href = {% url "cinema:profile" review.user.username %}><strong>{{ review.user }} - {{ review.stars }}/5</strong></a><br />
+                    {{ review.review_text }} </br> 
+                    <div>
+                        <form id="like_test" method="post" action="{% url 'cinema:like' film.slug %}">
+                            {% csrf_token %}
+                            <input type="text" name="review_text" value="{{ review.review_text }}" size="50" hidden="true" />
+                            <input type="text" name="imdb" value="{{ review.IMDB_num }}" hidden="true" />
+                            <input type="number" name="stars" value="{{ review.stars }}" hidden="true" />
+                            <button id="like_test" method="post" action="{% url 'cinema:like' film.slug %}" 
+                            type="submit" class="likeButton" onclick="like(this, 'blue')"><i class="fa fa-thumbs-up" aria-hidden="true"></i> {{ review.likes }}</button>
+                        </form>
+                    </div>
+                    </br>
                     {% endfor %}
                 </ul>
             {% else %}
@@ -26,4 +56,10 @@
             The specified film does not exist.
         {% endif %}
     </div>
+
+    <script>
+        function like(element, color) {
+          element.style.color = color;
+        }
+    </script>
 {% endblock %}

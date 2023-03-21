@@ -1,6 +1,8 @@
+import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+
 from django.http import HttpResponse
 from django.urls import reverse
 from cinema.forms import UserForm, ReviewForm, FilmForm
@@ -48,6 +50,21 @@ def reviews(request, film_title_slug):
 
     return render(request, 'cinema/reviews.html', context=context_dict)
 
+def like(request, film_title_slug):
+    try:
+        review = Review.objects.get(review_text=request.POST.get("review_text"), IMDB_num=film_title_slug, stars=request.POST.get("stars"))
+        review.likes += 1
+        review.save()
+        
+    except Review.DoesNotExist:
+        print(request.POST.get("review_text"), request.POST.get("imdb"), request.POST.get("stars"))
+    except Review.MultipleObjectsReturned:
+        reviews = Review.objects.filter(review_text=request.POST.get("review_text"), IMDB_num=film_title_slug, stars=request.POST.get("stars"))
+        for review in reviews:
+            review.likes += 1
+            review.save()
+
+    return redirect(reverse('cinema:reviews', kwargs={'film_title_slug':film_title_slug}))
 
 def search(request):
     context_dict = {}
@@ -159,9 +176,7 @@ def leave_review(request, film_title_slug):
 
     form = ReviewForm()
 
-    print(request.method)
     if request.method == 'POST':
-        print(film.IMDB_num)
         form = ReviewForm(request.POST)
 
         if form.is_valid():
