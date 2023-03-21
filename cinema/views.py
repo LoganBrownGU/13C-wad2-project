@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse
-from cinema.forms import UserForm, ReviewForm
+from cinema.forms import UserForm, ReviewForm, FilmForm
 from cinema.models import Film, Review
 
 
@@ -23,7 +23,14 @@ def user(request):
 
 
 def manager(request):
-    context_dict = {}
+    context_dict = {'film_added': False, 'film_form': FilmForm()}
+    if request.method == 'POST':
+        film_form = FilmForm(request.POST, request.FILES)
+        if film_form.is_valid():
+            film_form.save()
+            context_dict['film_added'] = True
+        else:
+            context_dict['form_errors'] = film_form.errors
 
     return render(request, 'cinema/manager.html', context=context_dict)
 
@@ -182,7 +189,7 @@ def user_profile(request, username):
     try:
         user = User.objects.get(username=username)
         context["profile"] = user
-        context["reviews"] = Review.objects.filter(user=user).order_by("-likes")[:10]
+        context["reviews"] = Review.objects.filter(user=user).order_by("-likes")
 
     except:
         return redirect(reverse("cinema:home"))
