@@ -26,10 +26,11 @@ function handleXML(data) {
 }
 
 $(document).ready(function () {
-    $('#filters').click(function () {
+    $('#filters').children().click(function () {
         var filter = $(this).val();
-        var search = $('#search_text').val()
+        var search = $('#search_text').html()
+        search = search.split("\"")[1];
 
-        $.get("/cinema/change_search_filter/", {'filter': filter, 'search':search}, function(data){handleXML(data)});
+        $.get("/cinema/change_search_filter/", {'filter': filter, 'search': search}, function(data){handleXML(data)});
     });
 });
