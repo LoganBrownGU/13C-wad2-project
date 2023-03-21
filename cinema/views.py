@@ -182,7 +182,7 @@ def user_profile(request, username):
     try:
         user = User.objects.get(username=username)
         context["profile"] = user
-        context["reviews"] = Review.objects.filter(user=user).order_by("-likes")[:5]
+        context["reviews"] = Review.objects.filter(user=user).order_by("-likes")[:10]
 
     except:
         return redirect(reverse("cinema:home"))
