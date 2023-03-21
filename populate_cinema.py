@@ -5,19 +5,11 @@ import django
 
 django.setup()
 from django.contrib.auth.models import User
-from django.utils import timezone
 from random import randrange
 from datetime import datetime
 from cinema.models import Film, Review
 
 import re
-
-zero = ord('0')
-nine = ord('9')
-a = ord('a')
-z = ord('z')
-A = ord('A')
-Z = ord('z')
 
 def sanitise(string):
     out = ""
@@ -25,10 +17,6 @@ def sanitise(string):
     for c in string:
         if str(c).isalnum() or c == " ":
             out += str(c)
-
-            print("here")
-
-    print(out)
 
     return out
 
@@ -59,8 +47,6 @@ def populate():
             likes = randrange(0, 1000)
             dislikes = randrange(0, 1000)
             reviews.append(Review.objects.get_or_create(user=user, IMDB_num=film[0], stars=randrange(1, 5), review_text=review_text, likes=likes, dislikes=dislikes))
-
-    print("c".isalpha())
 
 
 if __name__ == '__main__':
