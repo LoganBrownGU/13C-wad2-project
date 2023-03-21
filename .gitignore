@@ -6,7 +6,7 @@ db.sqlite3
 *.key
 thumbs.db
 profile_images/
-
+film_images/
 
 # Virtual Environments
 .env

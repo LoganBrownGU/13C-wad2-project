@@ -5,5 +5,29 @@
 {% endblock %}
 
 {% block body_block %}
-    This is the user page
+    <div class = "jumbotron text-center">
+        <h1>{{ profile.username }}</h1>
+        <br>
+        <h2>Reviews({{ reviews.count }}):</h2>
+    </div>
+    <br>
+
+    {% for review in reviews %}
+        <div class="card">
+            {% if review.IMDB_num.photo %}
+                <img class="card-img-top" src = "{{ review.IMDB_num.photo.url }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title”>{{ review.IMDB_num.title }}</h5>
+                <p class="card-text">
+                    Title: {{ review.IMDB_num.title }}<br>
+                    Stars: {{ review.stars }}<br>
+                    Review: {{ review.review_text }}<br>
+                    Likes: {{ review.likes }}<br>
+                    Dislikes: {{ review.dislikes }}<br>
+                </p>
+                <a href={% url "cinema:reviews" review.IMDB_num.slug %} class="btn btn-primary">View Film</a>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}

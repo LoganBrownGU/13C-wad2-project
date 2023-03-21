@@ -5,5 +5,15 @@
 {% endblock %}
 
 {% block body_block %}
-    This is the manager page
+    <h1>Add Film</h1>
+    {% if film_added %}
+        <p>Film added!</p>
+    {% elif form_errors %}
+       {{ form_errors }}
+    {% endif %}
+    <form id="film_form" method="post" action="{% url 'cinema:manager' %} " enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ film_form.as_p }}
+        <button type="submit">Add Film</button>
+    </form>
 {% endblock %}

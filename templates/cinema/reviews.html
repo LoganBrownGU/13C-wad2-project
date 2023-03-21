@@ -34,7 +34,7 @@
             {% if reviews %}
                 <ul>
                     {% for review in reviews %}
-                    <strong>{{ review.user }} - {{ review.stars }}/5</strong> </br>
+                    <a href = {% url "cinema:profile" review.user.username %}><strong>{{ review.user }} - {{ review.stars }}/5</strong></a><br />
                     {{ review.review_text }} </br> 
                     <div>
                         <form id="like_test" method="post" action="{% url 'cinema:like' film.slug %}">

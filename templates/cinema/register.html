@@ -2,20 +2,31 @@
 {% extends 'cinema/base.html' %}
 
 {% block title_block %}
-    Register
+    Sign up
 {% endblock %}
 
 {% block body_block %}
-<h1>Register for PopPopCinema</h1>
-{% if registered %}
-<strong>Thank You for Registering!</strong>
-<a href="{% url 'cinema:home' %}">Return to the homepage.</a><br />
-{% else %}
-<form id="user_form" method="post" action="{% url 'cinema:register' %}" enctype="multipart/form-data">
-
-	{% csrf_token %}
-	{{ user_form.as_p }}
-	<input type="submit" name="submit" value="Register" />
-</form>
-{% endif %}
+    <div class="card col-lg-4">
+        <div class="card-body">
+            {% if registered %}
+                <strong>Thank You for Registering!</strong>
+                <a href="{% url 'cinema:home' %}">Return to the homepage.</a><br/>
+            {% else %}
+                <h1>Sign up</h1>
+                <form id="user_form" method="post" action="{% url 'cinema:register' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for field in user_form %}
+                        <div class="mb-3">
+                            <label for="{{ field.auto_id }}" class="form-label">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.label == "Username" %}
+                                <div id="usernameHelp" class="form-text">{{ field.help_text }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary" value="submit">Submit</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}
