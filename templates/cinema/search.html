@@ -6,6 +6,9 @@
 
 {% block body_block %}
 
+    <h2 id="search_text">Your search: "{{ search }}"</h2>
+    <br>
+
     Filters
     <select name="filters" id="filters">
         <option value="none">None</option>
@@ -13,7 +16,6 @@
         <option value="popular">Popular</option>
     </select>
 
-    <h2 id="search_text">Your search: "{{ search }}"</h2>
 
     {% if films %}
         <ul id="films">

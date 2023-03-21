@@ -13,7 +13,7 @@
     <br>
 
     {% for review in reviews %}
-        <div class="card" style="width: 18rem;">
+        <div class="card">
             {% if review.IMDB_num.photo %}
                 <img class="card-img-top" src = "{{ review.IMDB_num.photo.url }}">
             {% endif %}
