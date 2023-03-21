@@ -37,6 +37,7 @@
                     <a href = {% url "cinema:profile" review.user.username %}><strong>{{ review.user }} - {{ review.stars }}/5</strong></a><br />
                     {{ review.review_text }} </br> 
                     <div>
+                        {% if user.is_authenticated %}
                         <form id="like_test" method="post" action="{% url 'cinema:like' film.slug %}">
                             {% csrf_token %}
                             <input type="text" name="review_text" value="{{ review.review_text }}" size="50" hidden="true" />
@@ -45,6 +46,16 @@
                             <button id="like_test" method="post" action="{% url 'cinema:like' film.slug %}" 
                             type="submit" class="likeButton" onclick="like(this, 'blue')"><i class="fa fa-thumbs-up" aria-hidden="true"></i> {{ review.likes }}</button>
                         </form>
+                        {% else %}
+                        <form id="like_test" method="post" action="{% url 'cinema:register' %}">
+                            {% csrf_token %}
+                            <input type="text" name="review_text" value="{{ review.review_text }}" size="50" hidden="true" />
+                            <input type="text" name="imdb" value="{{ review.IMDB_num }}" hidden="true" />
+                            <input type="number" name="stars" value="{{ review.stars }}" hidden="true" />
+                            <button id="like_test" method="post" action="{% url 'cinema:like' film.slug %}" 
+                            type="submit" class="likeButton"><i class="fa fa-thumbs-up" aria-hidden="true"></i> {{ review.likes }}</button>
+                        </form>
+                        {% endif %}
                     </div>
                     </br>
                     {% endfor %}
