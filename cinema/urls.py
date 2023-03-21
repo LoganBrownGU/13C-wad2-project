@@ -15,4 +15,5 @@ urlpatterns = [
     path('change_search_filter/', views.change_search_filter, name='change_search_filter'),
     path('reviews/<slug:film_title_slug>/leave_review/', views.leave_review, name='leave_review'),
     path('change_search_filter/', views.change_search_filter, name='change_search_filter'),
+    path('profile/<str:username>/', views.user_profile, name='profile'),
 ]

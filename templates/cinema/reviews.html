@@ -14,9 +14,9 @@
             {% if reviews %}
                 <ul>
                     {% for review in reviews %}
-                    <strong>{{ review.user }} - {{ review.stars }}/5</strong> </br>
-                    {{ review.review_text }} </br> 
-                    Likes: {{ review.likes }}   Dislikes: {{ review.dislikes }}</br>
+                        <a href = {% url "cinema:profile" review.user.username %}><strong>{{ review.user }} - {{ review.stars }}/5</strong></a><br />
+                    {{ review.review_text }} <br />
+                    Likes: {{ review.likes }}   Dislikes: {{ review.dislikes }}<br />
                     {% endfor %}
                 </ul>
             {% else %}
