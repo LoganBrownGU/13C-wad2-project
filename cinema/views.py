@@ -167,7 +167,7 @@ def leave_review(request, film_title_slug):
                 review.dislikes = 0
                 review.save()
 
-                return redirect(reverse('cinema:leave_review', kwargs={'film_title_slug': film_title_slug}))
+                return redirect(reverse('cinema:reviews', kwargs={'film_title_slug': film_title_slug}))
 
         else:
             print(form.errors)
@@ -182,7 +182,7 @@ def user_profile(request, username):
     try:
         user = User.objects.get(username=username)
         context["profile"] = user
-        context["reviews"] = Review.objects.filter(user=user).order_by("-likes")[:5]
+        context["reviews"] = Review.objects.filter(user=user).order_by("-likes")
 
     except:
         return redirect(reverse("cinema:home"))
