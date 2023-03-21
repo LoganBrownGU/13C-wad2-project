@@ -34,14 +34,20 @@
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'cinema:user' %}">User</a>
+                    </li>
+                    {% if user.is_staff %}
+                        <a class="nav-link" href="{% url 'cinema:manager' %}">Manager</a>
+                    {% endif %}
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'cinema:logout' %}">Logout</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cinema:register' %}">Sign up</a>
+                        <a class="nav-link" href="{% url 'cinema:login' %}">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cinema:login' %}">Login</a>
+                        <a class="nav-link" href="{% url 'cinema:register' %}">Sign up</a>
                     </li>
                 {% endif %}
             </ul>
