@@ -34,7 +34,7 @@
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cinema:user' %}">User</a>
+                        <a class="nav-link" href="{% url 'cinema:profile' user.username %}">User</a>
                     </li>
                     {% if user.is_staff %}
                         <a class="nav-link" href="{% url 'cinema:manager' %}">Manager</a>
