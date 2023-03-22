@@ -8,10 +8,14 @@
     <div class = "jumbotron text-center">
         <h1>{{ profile.username }}</h1>
         <br>
+        {% if reviews %}
         <h2>Reviews({{ reviews.count }}):</h2>
+        {% else %}
+        <h2>This user has no reviews</h2>
+        {% endif %}
     </div>
     <br>
-
+    
     {% for review in reviews %}
         <div class="card">
             {% if review.IMDB_num.photo %}
