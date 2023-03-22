@@ -45,8 +45,7 @@ def populate():
             user = users[randrange(0, len(users))]
             review_text = possible_comments[randrange(0, len(possible_comments))]
             likes = randrange(0, 1000)
-            dislikes = randrange(0, 1000)
-            reviews.append(Review.objects.get_or_create(user=user, IMDB_num=film[0], stars=randrange(1, 5), review_text=review_text, likes=likes, dislikes=dislikes))
+            reviews.append(Review.objects.get_or_create(user=user, IMDB_num=film[0], stars=randrange(1, 5), review_text=review_text, likes=likes))
 
 
 if __name__ == '__main__':

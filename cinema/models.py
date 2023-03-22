@@ -28,7 +28,8 @@ class Review(models.Model):
     stars = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     review_text = models.TextField()
     likes = models.PositiveIntegerField(default=0)
-    dislikes = models.PositiveIntegerField(default=0)
+    liked = models.TextField(default='')
+
 
     def __str__(self):
         return f"{self.user} reviewed {self.IMDB_num}"
