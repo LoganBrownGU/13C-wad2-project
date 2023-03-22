@@ -12,10 +12,10 @@ Windows - `env/scripts/activate`
 
 3. Install required packages: `pip3 install -r requirements.txt`.
 
-4. Delete old database if it exists: rm db.sqlite3
+4. Delete old database if it exists: `rm db.sqlite3`
 
-5. Migrate: python manage.py migrate --run-syncdb
+5. Migrate: `python manage.py migrate --run-syncdb`
 
-6. Run population script: python populate_cinema.py
+6. Run population script: `python populate_cinema.py`
 
 7. Run server: `python3 manage.py runserver`.
