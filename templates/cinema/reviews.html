@@ -1,4 +1,5 @@
 {% extends 'cinema/base.html' %}
+{% load staticfiles %}
 
 {% block title_block %}
     Reviews
@@ -23,39 +24,72 @@
             .likeButton:hover {
                 background-color: lightgrey;
             }
+            * {
+            box-sizing: border-box;
+            }
+            
+            .column {
+            float: left;
+            width: 30%;
+            padding: 5px;
+            }
+
+            .reviewcolumn {
+            float: right;
+            width: 70%;
+            padding: 5px;
+            }
+            
+            .row::after {
+            content: "";
+            clear: both;
+            display: table;
+            }
         </style>        
     </head>
     <div>
         {% if film %}
             <h1>{{ film.title }}</h1>
-            {% if user.is_authenticated %}
-            <a href="{% url 'cinema:leave_review' film.slug %}">Leave a Review</a><br />
+
+            <div class="column">
+            {% if film.photo %}
+                <img class="card-body" src = "/{{ film.photo }}" width="400" height="600">
+            {% else %}
+                <img class="card-body" src = "{% static 'images/film_images/default.jpg' %}" width="400" height="600">
             {% endif %}
+            <br />
+            {% if user.is_authenticated %}
+            <a href="{% url 'cinema:leave_review' film.slug %}" class="btn btn-primary">Leave a Review</a><br />
+            {% endif %}
+            </div>
+            <div class="reviewcolumn">
             {% if reviews %}
                 <ul>
                     {% for review in reviews %}
-                    <a href = {% url "cinema:profile" review.user.username %}><strong>{{ review.user }} - {{ review.stars }}/5</strong></a><br />
-                    {{ review.review_text }} </br> 
-                    <div>
-                        {% if user.is_authenticated %}
-                        <form id="like_test" method="post" action="{% url 'cinema:like' film.slug %}">
-                            {% csrf_token %}
-                            <input type="text" name="review_text" value="{{ review.review_text }}" size="50" hidden="true" />
-                            <input type="text" name="imdb" value="{{ review.IMDB_num }}" hidden="true" />
-                            <input type="number" name="stars" value="{{ review.stars }}" hidden="true" />
-                            <button id="like_test" method="post" action="{% url 'cinema:like' film.slug %}" 
-                            type="submit" class="likeButton" onclick="like(this, 'blue')"><i class="fa fa-thumbs-up" aria-hidden="true"></i> {{ review.likes }}</button>
-                        </form>
-                        {% else %}
-                        <form id="like_test" method="post" action="{% url 'cinema:register' %}">
-                            {% csrf_token %}
-                            <input type="text" name="review_text" value="{{ review.review_text }}" size="50" hidden="true" />
-                            <input type="text" name="imdb" value="{{ review.IMDB_num }}" hidden="true" />
-                            <input type="number" name="stars" value="{{ review.stars }}" hidden="true" />
-                            <button id="like_test" method="post" action="{% url 'cinema:like' film.slug %}" 
-                            type="submit" class="likeButton"><i class="fa fa-thumbs-up" aria-hidden="true"></i> {{ review.likes }}</button>
-                        </form>
-                        {% endif %}
+                    <div class="card">
+                        <div class="card-body">
+                            <a href = {% url "cinema:profile" review.user.username %}><strong>{{ review.user }} - {{ review.stars }}/5</strong></a><br />
+                                {{ review.review_text }} </br> 
+                            
+
+                            {% if user.is_authenticated %}
+                            <form id="like_test" method="post" action="{% url 'cinema:like' film.slug %}">
+                                {% csrf_token %}
+                                <input type="text" name="review_text" value="{{ review.review_text }}" size="50" hidden="true" />
+                                <input type="text" name="imdb" value="{{ review.IMDB_num }}" hidden="true" />
+                                <input type="number" name="stars" value="{{ review.stars }}" hidden="true" />
+                                <button id="like_test" method="post" action="{% url 'cinema:like' film.slug %}" 
+                                type="submit" class="likeButton" onclick="like(this, 'blue')"><i class="fa fa-thumbs-up" aria-hidden="true"></i> {{ review.likes }}</button>
+                            </form>
+                            {% else %}
+                            <form id="like_test" method="post" action="{% url 'cinema:register' %}">
+                                {% csrf_token %}
+                                <button id="like_test" method="post" action="{% url 'cinema:like' film.slug %}" 
+                                type="submit" class="likeButton"><i class="fa fa-thumbs-up" aria-hidden="true"></i> {{ review.likes }}</button>
+                            </form>
+                            {% endif %}
+                            
+                        </div>
                     </div>
                     </br>
                     {% endfor %}
@@ -63,6 +97,7 @@
             {% else %}
                 <strong>No reviews for this film.</strong>
             {% endif %}
+            <div class="column"></div>
         {% else %}
             The specified film does not exist.
         {% endif %}
