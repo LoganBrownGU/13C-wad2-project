@@ -64,7 +64,11 @@ def like(request, film_title_slug):
             review.likes += 1
             review.save()
 
-    return redirect(reverse('cinema:reviews', kwargs={'film_title_slug':film_title_slug}))
+    if request.POST.get("origin") == "reviews":
+        return redirect(reverse('cinema:reviews', kwargs={'film_title_slug':film_title_slug}))
+    
+    elif request.POST.get("origin") == "user":
+        return redirect(reverse('cinema:profile', kwargs={'username':request.POST.get("user")}))
 
 def search(request):
     context_dict = {}
