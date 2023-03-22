@@ -50,21 +50,43 @@ def reviews(request, film_title_slug):
 
     return render(request, 'cinema/reviews.html', context=context_dict)
 
+
 def like(request, film_title_slug):
     try:
         review = Review.objects.get(review_text=request.POST.get("review_text"), IMDB_num=film_title_slug, stars=request.POST.get("stars"))
-        review.likes += 1
-        review.save()
+        liked = review.liked.split(' ')
+        if not request.user.username in liked:
+            review.liked = review.liked + request.user.username + ' '
+            review.likes += 1
+            review.save()
+        else:
+            liked.remove(request.user.username)
+            review.liked = ' '.join(liked)
+            review.likes += -1
+            review.save()
         
     except Review.DoesNotExist:
         print(request.POST.get("review_text"), request.POST.get("imdb"), request.POST.get("stars"))
     except Review.MultipleObjectsReturned:
         reviews = Review.objects.filter(review_text=request.POST.get("review_text"), IMDB_num=film_title_slug, stars=request.POST.get("stars"))
         for review in reviews:
-            review.likes += 1
-            review.save()
+            liked = review.liked.split(' ')
+            if not request.user.username in liked:
+                review.liked = review.liked + request.user.username + ' '
+                review.likes += 1
+                review.save()
+            else:
+                liked.remove(request.user.username)
+                review.liked = ' '.join(liked)
+                review.likes += -1
+                review.save()
 
-    return redirect(reverse('cinema:reviews', kwargs={'film_title_slug':film_title_slug}))
+    if request.POST.get("origin") == "reviews":
+        return redirect(reverse('cinema:reviews', kwargs={'film_title_slug':film_title_slug}))
+    
+    elif request.POST.get("origin") == "user":
+        return redirect(reverse('cinema:profile', kwargs={'username':request.POST.get("user")}))
+    
 
 def search(request):
     context_dict = {}

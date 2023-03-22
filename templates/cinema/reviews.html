@@ -75,9 +75,11 @@
                             {% if user.is_authenticated %}
                             <form id="like_test" method="post" action="{% url 'cinema:like' film.slug %}">
                                 {% csrf_token %}
+                                <input type="text" name="user" value="{{ review.user }}" size="50" hidden="true" />
                                 <input type="text" name="review_text" value="{{ review.review_text }}" size="50" hidden="true" />
                                 <input type="text" name="imdb" value="{{ review.IMDB_num }}" hidden="true" />
                                 <input type="number" name="stars" value="{{ review.stars }}" hidden="true" />
+                                <input type="text" name="origin" value="reviews" hidden="true" />
                                 <button id="like_test" method="post" action="{% url 'cinema:like' film.slug %}" 
                                 type="submit" class="likeButton" onclick="like(this, 'blue')"><i class="fa fa-thumbs-up" aria-hidden="true"></i> {{ review.likes }}</button>
                             </form>
@@ -85,7 +87,7 @@
                             <form id="like_test" method="post" action="{% url 'cinema:register' %}">
                                 {% csrf_token %}
                                 <button id="like_test" method="post" action="{% url 'cinema:like' film.slug %}" 
-                                type="submit" class="likeButton"><i class="fa fa-thumbs-up" aria-hidden="true"></i> {{ review.likes }}</button>
+                                type="submit" class="likeButton" ><i class="fa fa-thumbs-up" aria-hidden="true"></i> {{ review.likes }}</button>
                             </form>
                             {% endif %}
                             
@@ -106,6 +108,9 @@
     <script>
         function like(element, color) {
           element.style.color = color;
+        }
+        function isIn(substring, string) {
+            return string.includes(substring);
         }
     </script>
 {% endblock %}

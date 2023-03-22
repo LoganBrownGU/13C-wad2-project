@@ -7,28 +7,40 @@
 
 {% block body_block %}
     <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <style>
-        * {
-        box-sizing: border-box;
-        }
-        
-        .column {
-        float: left;
-        width: 85%;
-        padding: 5px;
-        }
+            .likeButton {
+                border: none;
+                color: black;
+                background-color: white;
+                text-decoration: none;
+                display: inline-block;
+                cursor: pointer;
+            }
+            .likeButton:hover {
+                background-color: lightgrey;
+            }
+            * {
+            box-sizing: border-box;
+            }
+            
+            .column {
+            float: left;
+            width: 90%;
+            padding: 5px;
+            }
 
-        .imgcolumn {
-        float: right;
-        width: 10%;
-        padding: 5px;
-        }
-        
-        .row::after {
-        content: "";
-        clear: both;
-        display: table;
-        }
+            .imgcolumn {
+            float: right;
+            width: 10%;
+            padding: 5px;
+            }
+            
+            .row::after {
+            content: "";
+            clear: both;
+            display: table;
+            }
         </style>
     </head>
     <div class = "jumbotron text-center">
@@ -49,23 +61,45 @@
                     <div class="card-body">
                         <h5 class="card-title”>{{ review.IMDB_num.title }}</h5>
                         <p class="card-text">
-                            Title: {{ review.IMDB_num.title }}<br>
-                            Stars: {{ review.stars }}<br>
-                            Review: {{ review.review_text }}<br>
-                            Likes: {{ review.likes }}<br>
-                            Dislikes: {{ review.dislikes }}<br>
+                        <a href = {% url "cinema:reviews" review.IMDB_num.slug %}><strong>{{ review.IMDB_num.title }} - {{ review.stars }}/5</strong></a><br />
+                        {{ review.review_text }} </br> 
                         </p>
-                        <a href={% url "cinema:reviews" review.IMDB_num.slug %} class="btn btn-primary">View Film</a>
+                    </div>
+                    <div class="card-body">
+                        {% if user.is_authenticated %}
+                        <form id="like_test" method="post" action="{% url 'cinema:like' review.IMDB_num.slug %}">
+                            {% csrf_token %}
+                            <input type="text" name="user" value="{{ review.user }}" size="50" hidden="true" />
+                            <input type="text" name="review_text" value="{{ review.review_text }}" size="50" hidden="true" />
+                            <input type="text" name="imdb" value="{{ review.IMDB_num }}" hidden="true" />
+                            <input type="number" name="stars" value="{{ review.stars }}" hidden="true" />
+                            <input type="text" name="origin" value="user" hidden="true" />
+                            <button id="like_test" method="post" action="{% url 'cinema:like' review.IMDB_num.slug %}" 
+                            type="submit" class="likeButton" onclick="like(this, 'blue')"><i class="fa fa-thumbs-up" aria-hidden="true"></i> {{ review.likes }}</button>
+                        </form>
+                        {% else %}
+                        <form id="like_test" method="post" action="{% url 'cinema:register' %}">
+                            {% csrf_token %}
+                            <button id="like_test" method="post" action="{% url 'cinema:like' review.IMDB_num.slug %}" 
+                            type="submit" class="likeButton" ><i class="fa fa-thumbs-up" aria-hidden="true"></i> {{ review.likes }}</button>
+                        </form>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="imgcolumn">
                     {% if review.IMDB_num.photo %}
-                        <img class="card-body" src = "/{{ review.IMDB_num.photo }}" width="200" height="300">
+                        <img class="card-body" src = "/{{ review.IMDB_num.photo }}" width="100" height="150">
                     {% else %}
-                    <img class="card-body" src = "{% static 'images/film_images/default.jpg' %}" width="200" height="300">
+                    <img class="card-body" src = "{% static 'images/film_images/default.jpg' %}" width="100" height="150">
                     {% endif %}
                 </div>
             </div>
         </div>
     {% endfor %}
+
+    <script>
+        function like(element, color) {
+          element.style.color = color;
+        }
+    </script>
 {% endblock %}
