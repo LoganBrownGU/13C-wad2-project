@@ -24,14 +24,13 @@ class ReviewForm(forms.ModelForm):
 
 
 class FilmForm(forms.ModelForm):
-    IMDB_num = forms.CharField(max_length=255)
-    title = forms.CharField(max_length=255)
-    release = forms.DateField()
-    cast = forms.CharField()
-    director = forms.CharField(max_length=255)
-    age_rating = forms.CharField(max_length=255)
-    photo = forms.ImageField(required=False)
-
     class Meta:
         model = Film
         fields = ('IMDB_num', 'title', 'release', 'cast', 'director', 'age_rating', 'photo')
+        widgets = {'IMDB_num': forms.TextInput(attrs={'class': 'form-control'}),
+                   'title': forms.TextInput(attrs={'class': 'form-control'}),
+                   'release': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'YYYY-MM-DD'}),
+                   'cast': forms.TextInput(attrs={'class': 'form-control'}),
+                   'director': forms.TextInput(attrs={'class': 'form-control'}),
+                   'age_rating': forms.TextInput(attrs={'class': 'form-control'}),
+                   'photo': forms.ClearableFileInput()}
