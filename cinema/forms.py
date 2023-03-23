@@ -13,13 +13,18 @@ class UserForm(forms.ModelForm):
 
 
 class ReviewForm(forms.ModelForm):
-    stars = forms.IntegerField(max_value=5, min_value=0, required=True, help_text="How many stars out of 5?")
-    review_text = forms.CharField(max_length=500, help_text="Write your review.")
     likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
 
     class Meta:
         model = Review
+        fields = ('stars', 'review_text', 'likes')
         exclude = ('user', 'IMDB_num', 'liked')
+        widgets = {'stars': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 5}),
+                   'review_text': forms.Textarea(attrs={'class': 'form-control', 'max_length': 500, 'rows': 3}), }
+        help_texts = {
+            'stars': 'How many stars out of 5?',
+            'review_text': 'Write your review',
+        }
 
 
 class FilmForm(forms.ModelForm):

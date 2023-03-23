@@ -6,16 +6,22 @@
 
 
 {% block body_block %}
-        <form id="review_form" method="post" action="{% url 'cinema:leave_review' film.slug %}">
-            {% csrf_token %}
-            {% for hidden in form.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
-            {% for field in form.visible_fields %}
-                {{ field.errors }}
-                {{ field.help_text }}
-                {{ field }}
-            {% endfor %}
-            <input type="submit" name="submit" value="Leave Review" />
-        </form>
+    <div class="card col-lg-4">
+        <div class="card-body">
+            <form id="review_form" method="post" action="{% url 'cinema:leave_review' film.slug %}">
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                {% for field in form.visible_fields %}
+                    <div class="mb-3">
+                        <label for="{{ field.auto_id }}" class="form-label">{{ field.help_text }}</label>
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                {#            <input type="submit" name="submit" value="Leave Review" />#}
+                <button type="submit" class="btn btn-primary" value="Leave Review">Leave Review</button>
+            </form>
+        </div>
+    </div>
 {% endblock %}
