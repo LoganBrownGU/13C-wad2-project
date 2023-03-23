@@ -8,6 +8,8 @@ from django.urls import reverse
 from cinema.forms import UserForm, ReviewForm, FilmForm
 from cinema.models import Film, Review
 
+def get_films(search_text):
+    return Film.objects.filter(title__icontains=search_text)
 
 def home(request):
     film_list = Film.objects.order_by('-release')[:5]
@@ -97,7 +99,7 @@ def search(request):
     search_text = request.GET.get("search")
     context_dict["search"] = search_text
 
-    films = Film.objects.filter(title__icontains=search_text)
+    films = get_films(search_text)
     context_dict["films"] = films
 
     return render(request, 'cinema/search.html', context=context_dict)
@@ -158,10 +160,10 @@ def change_search_filter(request):
     filter = request.GET.get("filter")
     search_text = request.GET.get("search")
 
-    films = Film.objects.filter(title__icontains=search_text)
+    films = get_films(search_text)
 
     if (filter == "recent"):
-        films = films.order_by("-release")[:10]
+        films = films.order_by("-release")[:10] # get ten most recent films
         films = list(films)
     elif (filter == "popular"):
 
@@ -175,7 +177,7 @@ def change_search_filter(request):
             mean /= len(reviews)
             return mean
             
-        films = sorted(films, key=lambda f: find_mean(f), reverse=True)[:10]
+        films = sorted(films, key=lambda f: find_mean(f), reverse=True)[:10]    # get the ten films with the highest mean rating
 
     outstr = "<xml>"
     for film in films:
@@ -232,39 +234,3 @@ def user_profile(request, username):
 
     return render(request, "cinema/user.html", context=context)
 
-
-def change_search_filter(request):
-    if request.method == "GET":
-        filter = request.GET.get("filter")
-        search_text = request.GET.get("search")
-
-        print("search: " + filter)
-
-        films = Film.objects.filter(title__startswith=search_text)
-
-        if (filter == "recent"):
-            films = films.order_by("-release")[:10]
-            films = list(films)
-        elif (filter == "popular"):
-
-            def find_mean(f):
-                reviews = Review.objects.filter(IMDB_num=f.IMDB_num)
-                mean = 0
-
-                for review in reviews:
-                    mean += review.stars
-
-                mean /= len(reviews)
-                return mean
-
-            films = sorted(films, key=lambda f: find_mean(f), reverse=True)[:10]
-
-        outstr = "<xml>"
-        for film in films:
-            outstr += "<film><title>" + film.title + "</title><director>" + film.director + "</director><release>" + str(
-                film.release) + "</release>" + "<slug>" + film.slug + "</slug></film>\n"
-        outstr += "</xml>"
-
-        return HttpResponse(outstr)
-
-    return HttpResponse(None)
