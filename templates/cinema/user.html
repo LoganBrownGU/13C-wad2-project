@@ -41,6 +41,12 @@
             clear: both;
             display: table;
             }
+
+            a:link {
+            color: black;
+            background-color: transparent;
+            text-decoration: none;
+            }
         </style>
     </head>
     <div class = "jumbotron text-center">
@@ -56,12 +62,13 @@
     
     {% for review in reviews %}
         <div class="card">
+            <a href = "{% url 'cinema:reviews' review.IMDB_num.slug %}">
             <div class="row">
                 <div class="column">
                     <div class="card-body">
-                        <h5 class="card-title”>{{ review.IMDB_num.title }}</h5>
+                        <h5 class="card-title>{{ review.IMDB_num.title }}</h5>
                         <p class="card-text">
-                        <a href = {% url "cinema:reviews" review.IMDB_num.slug %}><strong>{{ review.IMDB_num.title }} - {{ review.stars }}/5</strong></a><br />
+                        <strong>{{ review.IMDB_num.title }} - {{ review.stars }}/5</strong><br />
                         {{ review.review_text }} </br> 
                         </p>
                     </div>
@@ -90,10 +97,11 @@
                     {% if review.IMDB_num.photo %}
                         <img class="card-body" src = "/{{ review.IMDB_num.photo }}" width="100" height="150">
                     {% else %}
-                    <img class="card-body" src = "{% static 'images/film_images/default.jpg' %}" width="100" height="150">
+                        <img class="card-body" src = "{% static 'images/film_images/default.jpg' %}" width="100" height="150">
                     {% endif %}
                 </div>
             </div>
+            </a>
         </div>
     {% endfor %}
 

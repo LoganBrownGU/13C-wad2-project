@@ -1,11 +1,37 @@
 <!DOCTYPE html>
 
 {% extends 'cinema/base.html' %}
+{% load staticfiles %}
 
 {% block title_block %}
 Home
 {% endblock %}
 {% block body_block %}
+<style>
+    .column {
+        float: left;
+        width: 90%;
+        padding: 5px;
+    }
+
+    .imgcolumn {
+        float: right;
+        width: 10%;
+        padding: 5px;
+    }
+
+    .row::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+
+    a:link {
+        color: black;
+        background-color: transparent;
+        text-decoration: none;
+    }
+</style>
 <div>
     <h1>Welcome to PopPopCinema</h1>
 </div>
@@ -15,7 +41,27 @@ Home
     {% if films %}
         <ul>
             {% for film in films %}
-                <a href="/cinema/reviews/{{ film.slug }}/">{{ film.title }}</a> - {{ film.director }} - {{ film.release }}<br />
+                <div class="card">
+                    <a href="/cinema/reviews/{{ film.slug }}/">
+                    <div class="card-body">
+                        <div class="column">
+                            <h4>{{ film.title }}</h4>
+                            <h5>
+                            {{ film.director }}<br />
+                            {{ film.cast }}<br />
+                            {{ film.release }}<br />
+                            </h5>
+                        </div>
+                        <div class="imgcolumn">
+                            {% if film.photo %}
+                                <img class="card-body" src = "/{{ film.photo }}" width="100" height="150">
+                            {% else %}
+                                <img class="card-body" src = "{% static 'images/film_images/default.jpg' %}" width="100" height="150">
+                            {% endif %}
+                        </div>
+                    </div>
+                    </a>
+                </div>
             {% endfor %}
         </ul>
     {% else %}
