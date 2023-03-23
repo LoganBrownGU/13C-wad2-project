@@ -19,6 +19,16 @@ def sanitise(string):
 
     return out
 
+def generate_review():
+    
+    out = ""
+    for i in range(20):
+        out += chr(randrange(ord('a'), ord('z')))
+
+    print(out)
+
+    return out
+
 
 def populate():
     users = []
@@ -41,11 +51,11 @@ def populate():
                                                     age_rating="18"))
 
     reviews = []
-    possible_comments = ["bad", "decent but i didnt like the end", "good"]
+
     for film in films:
         for i in range(10):
             user = users[randrange(0, len(users))]
-            review_text = possible_comments[randrange(0, len(possible_comments))]
+            review_text = generate_review() #possible_comments[randrange(0, len(possible_comments))]
             likes = randrange(0, 1000)
             reviews.append(Review.objects.get_or_create(user=user, IMDB_num=film[0], stars=randrange(1, 5),
                                                         review_text=review_text, likes=likes))
