@@ -9,7 +9,6 @@ from random import randrange
 from datetime import datetime
 from cinema.models import Film, Review
 
-import re
 
 def sanitise(string):
     out = ""
@@ -20,11 +19,11 @@ def sanitise(string):
 
     return out
 
-def populate():
 
+def populate():
     users = []
     for i in range(20):
-        users.append(User.objects.create_user("user"+str(i), password="user"+str(i)))
+        users.append(User.objects.create_user("user" + str(i), password="user" + str(i)))
 
     films = []
     with open("films.tsv") as f:
@@ -35,8 +34,11 @@ def populate():
                 continue
 
             line[2] = sanitise(line[2])
-        
-            films.append(Film.objects.get_or_create(IMDB_num=line[0], title=line[2], release=datetime.strptime(line[5] + "-01-01", "%Y-%m-%d").date(), cast="Nicolas Cage, Pedro Pascal", director="Quentin Tarantino", age_rating="18"))
+
+            films.append(Film.objects.get_or_create(IMDB_num=line[0], title=line[2],
+                                                    release=datetime.strptime(line[5] + "-01-01", "%Y-%m-%d").date(),
+                                                    cast="Nicolas Cage, Pedro Pascal", director="Quentin Tarantino",
+                                                    age_rating="18"))
 
     reviews = []
     possible_comments = ["bad", "decent but i didnt like the end", "good"]
@@ -45,9 +47,11 @@ def populate():
             user = users[randrange(0, len(users))]
             review_text = possible_comments[randrange(0, len(possible_comments))]
             likes = randrange(0, 1000)
-            reviews.append(Review.objects.get_or_create(user=user, IMDB_num=film[0], stars=randrange(1, 5), review_text=review_text, likes=likes))
+            reviews.append(Review.objects.get_or_create(user=user, IMDB_num=film[0], stars=randrange(1, 5),
+                                                        review_text=review_text, likes=likes))
 
 
 if __name__ == '__main__':
     print('Starting Cinema population script...')
     populate()
+    print('Cinema population script finished.')
