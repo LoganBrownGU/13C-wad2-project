@@ -16,11 +16,10 @@ class ReviewForm(forms.ModelForm):
     stars = forms.IntegerField(max_value=5, min_value=0, required=True, help_text="How many stars out of 5?")
     review_text = forms.CharField(max_length=500, help_text="Write your review.")
     likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
-    dislikes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
 
     class Meta:
         model = Review
-        exclude = ('user', 'IMDB_num',)
+        exclude = ('user', 'IMDB_num', 'liked')
 
 
 class FilmForm(forms.ModelForm):
