@@ -8,8 +8,10 @@ from django.urls import reverse
 from cinema.forms import UserForm, ReviewForm, FilmForm
 from cinema.models import Film, Review
 
+
 def get_films(search_text):
     return Film.objects.filter(title__icontains=search_text)
+
 
 def home(request):
     film_list = Film.objects.order_by('-release')[:5]
@@ -35,7 +37,6 @@ def manager(request):
             context_dict['film_added'] = True
         else:
             context_dict['form_errors'] = film_form.errors
-
     return render(request, 'cinema/manager.html', context=context_dict)
 
 
@@ -55,7 +56,8 @@ def reviews(request, film_title_slug):
 
 def like(request, film_title_slug):
     try:
-        review = Review.objects.get(review_text=request.POST.get("review_text"), IMDB_num=film_title_slug, stars=request.POST.get("stars"))
+        review = Review.objects.get(review_text=request.POST.get("review_text"), IMDB_num=film_title_slug,
+                                    stars=request.POST.get("stars"))
         liked = review.liked.split(' ')
         if not request.user.username in liked:
             review.liked = review.liked + request.user.username + ' '
@@ -66,11 +68,12 @@ def like(request, film_title_slug):
             review.liked = ' '.join(liked)
             review.likes += -1
             review.save()
-        
+
     except Review.DoesNotExist:
         print(request.POST.get("review_text"), request.POST.get("imdb"), request.POST.get("stars"))
     except Review.MultipleObjectsReturned:
-        reviews = Review.objects.filter(review_text=request.POST.get("review_text"), IMDB_num=film_title_slug, stars=request.POST.get("stars"))
+        reviews = Review.objects.filter(review_text=request.POST.get("review_text"), IMDB_num=film_title_slug,
+                                        stars=request.POST.get("stars"))
         for review in reviews:
             liked = review.liked.split(' ')
             if not request.user.username in liked:
@@ -84,11 +87,11 @@ def like(request, film_title_slug):
                 review.save()
 
     if request.POST.get("origin") == "reviews":
-        return redirect(reverse('cinema:reviews', kwargs={'film_title_slug':film_title_slug}))
-    
+        return redirect(reverse('cinema:reviews', kwargs={'film_title_slug': film_title_slug}))
+
     elif request.POST.get("origin") == "user":
-        return redirect(reverse('cinema:profile', kwargs={'username':request.POST.get("user")}))
-    
+        return redirect(reverse('cinema:profile', kwargs={'username': request.POST.get("user")}))
+
 
 def search(request):
     context_dict = {}
@@ -156,32 +159,34 @@ def user_logout(request):
 def change_search_filter(request):
     if request.method != "GET":
         return HttpResponse(None)
-    
+
     filter = request.GET.get("filter")
     search_text = request.GET.get("search")
 
     films = get_films(search_text)
 
     if (filter == "recent"):
-        films = films.order_by("-release")[:10] # get ten most recent films
+        films = films.order_by("-release")[:10]  # get ten most recent films
         films = list(films)
     elif (filter == "popular"):
 
         def find_mean(f):
             reviews = Review.objects.filter(IMDB_num=f.IMDB_num)
             mean = 0
-                
+
             for review in reviews:
                 mean += review.stars
-                
+
             mean /= len(reviews)
             return mean
-            
-        films = sorted(films, key=lambda f: find_mean(f), reverse=True)[:10]    # get the ten films with the highest mean rating
+
+        films = sorted(films, key=lambda f: find_mean(f), reverse=True)[
+                :10]  # get the ten films with the highest mean rating
 
     outstr = "<xml>"
     for film in films:
-        outstr += "<film><title>" + film.title + "</title><director>" + film.director + "</director><release>" + str(film.release) + "</release>" + "<slug>" + film.slug + "</slug></film>\n"
+        outstr += "<film><title>" + film.title + "</title><director>" + film.director + "</director><release>" + str(
+            film.release) + "</release>" + "<slug>" + film.slug + "</slug></film>\n"
     outstr += "</xml>"
 
     return HttpResponse(outstr)
@@ -233,4 +238,3 @@ def user_profile(request, username):
         return redirect(reverse("cinema:home"))
 
     return render(request, "cinema/user.html", context=context)
-

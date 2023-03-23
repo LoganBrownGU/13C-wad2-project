@@ -5,15 +5,31 @@
 {% endblock %}
 
 {% block body_block %}
-    <h1>Add Film</h1>
-    {% if film_added %}
-        <p>Film added!</p>
-    {% elif form_errors %}
-       {{ form_errors }}
+    {% if user.is_superuser %}
+        <div class="card col-lg-4">
+            <div class="card-body">
+                <h1>Add Film</h1>
+                {% if film_added %}
+                    <p>Film added!</p>
+                {% elif form_errors %}
+                    <p>Please enter date in form: YYYY-MM-DD</p>
+                {% endif %}
+                <form id="film_form" method="post" action="{% url 'cinema:manager' %} " enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for field in film_form %}
+                        <div class="mb-3">
+                            <label for="{{ field.auto_id }}" class="form-label">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <div id="usernameHelp" class="form-text">{{ field.help_text }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary" value="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <p>You do not have access to this webpage</p>
     {% endif %}
-    <form id="film_form" method="post" action="{% url 'cinema:manager' %} " enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ film_form.as_p }}
-        <button type="submit">Add Film</button>
-    </form>
 {% endblock %}
