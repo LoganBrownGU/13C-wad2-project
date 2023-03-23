@@ -14,7 +14,7 @@ def get_films(search_text):
 
 
 def home(request):
-    film_list = Film.objects.order_by('-release')[:5]
+    film_list = Film.objects.order_by('-release')[:10]
 
     context_dict = {}
     context_dict['films'] = film_list
