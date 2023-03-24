@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-
 from django.test import TestCase
 from django.urls import reverse
 
@@ -21,10 +20,15 @@ def make_user_john():
 
 class UserTests(TestCase):
 
-    def test_user_exists(self):
+    def test_user_has_username(self):
         make_user_john()
         self.assertTrue(User.objects.filter(username="JohnDaGoat12").exists())
 
-    # def test_user_redirected(self):
-    #     response = self.client.get(reverse("cinema:manager"))
-    #     self.assertEquals(response.status_code, 302)
+    def test_user_has_email(self):
+        make_user_john()
+        self.assertTrue(User.objects.filter(email="johnnyb2003@gmail.com").exists())
+
+    def test_user_has_password(self):
+        make_user_john()
+        self.assertTrue(User.objects.filter(password="John12345").exists())
+
