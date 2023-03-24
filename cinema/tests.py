@@ -54,6 +54,7 @@ def add_film(IMDB_num, title, release, cast, director, age_rating):
 
     new_film = Film(IMDB_num=IMDB_num, title=title, release=release,
                     cast=cast, director=director, age_rating=age_rating)
+    new_film.save()
 
     return new_film
     
