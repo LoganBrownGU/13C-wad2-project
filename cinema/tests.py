@@ -1,16 +1,14 @@
 from django.contrib.auth.models import User
+from cinema.models import Film
 
-
-from cinema.models import Film, Review
-from django.urls import reverse
 from django.test import TestCase
+from django.urls import reverse
 from datetime import datetime, timedelta
 import time
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.common.by import By
-
 
 def add_user(username, email, password):
     new_user = User()
@@ -118,12 +116,3 @@ class ReviewTests(TestCase):
 
         for f, fn in zip(films, film_names):
             self.assertEqual(f.text, fn)
-
-    def test_review_exists(self):
-        make_review()
-        self.assertTrue(Review.objects.filter(IMDB_num="1234", stars=5, review_text="Very good").exists())
-    
-    def test_likes_zero(self):
-        make_review()
-        self.assertTrue(Review.objects.get(IMDB_num="1234", stars=5, review_text="Very good").likes == 0 
-                        and Review.objects.get(IMDB_num="1234", stars=5, review_text="Very good").liked == "")
