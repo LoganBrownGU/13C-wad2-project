@@ -1,6 +1,7 @@
 from django.urls import path
 from cinema import views
 
+
 app_name = 'cinema'
 
 urlpatterns = [
