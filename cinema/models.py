@@ -11,7 +11,7 @@ class Film(models.Model):
     cast = models.TextField()
     director = models.CharField(max_length=255)
     age_rating = models.CharField(max_length=255)
-    photo = models.ImageField(upload_to='static/images/film_images', blank=True)
+    photo = models.ImageField(upload_to='static/images/film_images', blank=True, default="static/images/film_images/default.jpg")
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
