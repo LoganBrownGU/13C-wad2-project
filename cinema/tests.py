@@ -92,6 +92,17 @@ def make_review():
 
 class ReviewTests(TestCase):
 
+    def test_review_exists(self):
+        make_review()
+        self.assertTrue(Review.objects.filter(IMDB_num="1234", stars=5, review_text="Very good").exists())
+    
+    def test_likes_zero(self):
+        make_review()
+        self.assertTrue(Review.objects.get(IMDB_num="1234", stars=5, review_text="Very good").likes == 0 
+                        and Review.objects.get(IMDB_num="1234", stars=5, review_text="Very good").liked == "")
+
+class SearchBarTests(StaticLiveServerTestCase):
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -110,8 +121,6 @@ class ReviewTests(TestCase):
             Film.objects.get_or_create(IMDB_num=num, title=fn, release=datetime.now() - timedelta(days=365*(10-num)), cast="shdfisidf", director="ufh", age_rating="sfih")
             num += 1
 
-            print(datetime.now() - timedelta(days=365*(10-num)))
-
         self.selenium.get(str(self.live_server_url) + '/cinema/search/?search=the')
         films = self.selenium.find_element(By.CSS_SELECTOR, "#films")  
         films = films.find_elements(By.TAG_NAME, "a")
@@ -119,11 +128,3 @@ class ReviewTests(TestCase):
         for f, fn in zip(films, film_names):
             self.assertEqual(f.text, fn)
 
-    def test_review_exists(self):
-        make_review()
-        self.assertTrue(Review.objects.filter(IMDB_num="1234", stars=5, review_text="Very good").exists())
-    
-    def test_likes_zero(self):
-        make_review()
-        self.assertTrue(Review.objects.get(IMDB_num="1234", stars=5, review_text="Very good").likes == 0 
-                        and Review.objects.get(IMDB_num="1234", stars=5, review_text="Very good").liked == "")
